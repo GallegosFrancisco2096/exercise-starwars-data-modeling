@@ -8,26 +8,42 @@ from eralchemy import render_er
 
 Base = declarative_base()
 
-class Person(Base):
-    __tablename__ = 'person'
-    # Here we define columns for the table person
+class User(Base):
+    __tablename__ = 'user'
+    # Here we define columns for the table user
     # Notice that each column is also a normal Python instance attribute.
-    id = Column(Integer, primary_key=True)
-    name = Column(String(250), nullable=False)
+    user_id = Column(Integer, primary_key=True)
+    name = Column(String(50), nullable=False)
+    password = Column(String(50), nullable=False)
 
-class Address(Base):
-    __tablename__ = 'address'
+class Favorites(Base):
+    __tablename__ = 'favorites'
     # Here we define columns for the table address.
     # Notice that each column is also a normal Python instance attribute.
-    id = Column(Integer, primary_key=True)
-    street_name = Column(String(250))
-    street_number = Column(String(250))
-    post_code = Column(String(250), nullable=False)
-    person_id = Column(Integer, ForeignKey('person.id'))
-    person = relationship(Person)
+    favorites_id = Column(Integer, primary_key=True)
+    favorite_character_id = Column(Integer, ForeignKey('characters.character_id'))
+    favorite_planet_id = Column(Integer, ForeignKey('planets.planet_id'))
+    user_id = Column(Integer, ForeignKey('user.user_id'))
+    user = relationship(User)
 
     def to_dict(self):
         return {}
+
+
+class Characters(Base):
+    __tablename__ = 'characters'
+    # Here we define columns for the table user
+    # Notice that each column is also a normal Python instance attribute.
+    character_id = Column(Integer, primary_key=True)
+    name = Column(String(50), nullable=False)
+
+class Planets(Base):
+    __tablename__ = 'planets'
+    # Here we define columns for the table user
+    # Notice that each column is also a normal Python instance attribute.
+    planet_id = Column(Integer, primary_key=True)
+    name = Column(String(50), nullable=False)
+
 
 ## Draw from SQLAlchemy base
 render_er(Base, 'diagram.png')
